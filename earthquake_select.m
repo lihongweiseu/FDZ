@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 function [Nt,t,ag] = earthquake_select(E_direc,E_swit,E_intens)
 % this is a function used in 'isolation_run.m' to select earthquake and direction
 dt=0.005;
