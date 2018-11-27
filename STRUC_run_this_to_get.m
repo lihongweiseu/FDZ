@@ -35,11 +35,10 @@ eigenvec=[-0.01220185	0.00018398	0.00011371	0.00036462	0.00975687	-0.00224544	0.
 %the eigenvec above is from floor 8 to 1 and mode 1 to 24
 %for example eigenvec(9,6) is the rotation shape of floor 3 of mode 6
 %the following is to transform the eigenvec to the form from floor 1 to 8
+
 temp=eigenvec;
 for i=1:1:nfloors
-    eigenvec(3*(nfloors-i)+1,:)=temp(3*i-2,:);
-    eigenvec(3*(nfloors-i)+2,:)=temp(3*i-1,:);
-    eigenvec(3*(nfloors-i)+3,:)=temp(3*i,:);
+    eigenvec(3*(nfloors-i)+1,:)=temp(3*i-2,:);eigenvec(3*(nfloors-i)+2,:)=temp(3*i-1,:);eigenvec(3*(nfloors-i)+3,:)=temp(3*i,:);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
@@ -91,9 +90,14 @@ STRUC.C = (eigenvec'\assembled_damping)/eigenvec;
 STRUC.m = assembled_mass(25:27,25:27);
 
 % Check
-nat_freqs = sqrt(diag(eigenvec'*STRUC.K*eigenvec)./diag(eigenvec'*STRUC.M*eigenvec));
-dampings = diag(eigenvec'*STRUC.C*eigenvec)./diag(eigenvec'*STRUC.M*eigenvec)/2./nat_freqs;
+nat_freqs = diag(eigenvec'*STRUC.K*eigenvec)./diag(eigenvec'*STRUC.M*eigenvec);
+dampings = diag(eigenvec'*STRUC.C*eigenvec)./diag(eigenvec'*STRUC.M*eigenvec)/2./sqrt(nat_freqs);
 unit_M=eigenvec'*STRUC.M*eigenvec;
+det_wMK=zeros(1,24); modes=zeros(24,24);
+for i=1:1:24
+    det_wMK(i)=det(eigenval(i)*STRUC.M-STRUC.K);
+    modes(:,i)=(eigenval(i)*STRUC.M-STRUC.K)*eigenvec(:,i);
+end
 
 R=zeros(24,3); % R is the matrix of earthquake influence coefficients
 for i=1:1:8

@@ -1,9 +1,9 @@
-%clear all; close all;
+%clc, clear all; close all; %#ok<CLALL>
 err=0.005; format long
 % Earthquake
 dt=0.005;
 E_intens=1;      % EQ Intensity
-E_swit=3;        % EQ Switch 1:Newhall 2:Sylmar 3:El Centro 4:Rinaldi 5:Kobe 6:Jiji 7:Erzinkan
+E_swit=2;        % EQ Switch 1:Newhall 2:Sylmar 3:El Centro 4:Rinaldi 5:Kobe 6:Jiji 7:Erzinkan
 E_direc=1;       % EQ Direction 1:FP-X,FN-Y 2:FN-X,FP-Y
 
 if E_direc==1
@@ -55,7 +55,7 @@ vs0=resp_uncontroled(:,25:48)'; % v-volcity
 ab_as0=MK*us0+MC*vs0; % absolute acceleration
 
 % Response with linear bearings
-kl=H*919.422;cl=H*27.717;
+kl=H*919.422;cl=H*27.717;%cl=H*27.717;%cl=H*183.884;
 mkl=m\kl;mcl=m\cl;
 Al=[zeros(24,24) eye(24) zeros(24,6);MK-R*m_RK MC-R*m_RC R*mkl R*mcl;zeros(3,51) eye(3);m_RK m_RC -mkl -mcl];
 Bl=[zeros(51,3);-eye(3)]; Cl=eye(54); Dl=zeros(54,3);
@@ -67,12 +67,12 @@ vbl=resp_l(:,52:54)';
 ab_abl=Al(52:54,:)*[usl;vsl;ubl;vbl]; ab_asl=MK*usl+MC*vsl;
 
 % Response with fractional bearings
-A_h=pi()*0.27^2/0.18; % geometric parameters of the VE damper: shear area over shear heihgt 0.41^2/0.25 0.27^2/0.18
+A_h=pi()*0.45^2/0.50; % geometric parameters of the VE damper: shear area over shear heihgt 0.41^2/0.25 0.27^2/0.18
 %parameters of FDZe model identified by the experiments. G1,G2,yita (kpa).
 G1=4.794E3;G2=4.793E2; eta=2.483E2; alpha=0.520;  a_0=(G1+G2)/eta;b_1=A_h*G1; b_0=b_1*G2/eta;
-wa=zeros(1,Nt-1);wa(1)=alpha;UL=Nt-1;T=dt^alpha;
+GL=zeros(1,Nt-1);GL(1)=-alpha;UL=Nt-1;T=dt^alpha;
 for i=2:1:Nt-1
-    temp=(1+alpha)/i;wa(i)=wa(i-1)*(1-temp);
+    temp=(1+alpha)/i;GL(i)=GL(i-1)*(1-temp);
     if abs(err>temp)
         UL=i-1;
         break;
@@ -85,13 +85,13 @@ sys=ss(As,Bs,Cs,Ds) ;sysd=c2d(sys,dt);Asd=sysd.A;Bsd=sysd.B;Csd=sysd.C;Dsd=sysd.
 %bearing subsystem
 Ab=-a_0*T*eye(3); Bb=T*eye(3); Cb=(b_0-a_0*b_1)*H; Db=b_1*H;
 xb_initial=zeros(3,1);xs_initial=zeros(54,1);
-Reduce=zeros(3,54);Reduce(:,49:51)=eye(3);aN=alpha*[1;1;1];
+Reduce=zeros(3,54);Reduce(:,49:51)=eye(3);
 
 %simulation
-input=[t' ag'];sim('fsim_2016a');
+agt=[t' ag'];sim('fss2016a'); clear fss_sf;
 usf=usb.data(:,1:24)'; % s-superstructure f-fractional bearings
 vsf=usb.data(:,25:48)';
-ubf=usb.data(:,49:52)'; % b-base
+ubf=usb.data(:,49:51)'; % b-base
 Fgf=Fb.data'; % force of the ground
 ab_abf=As(52:54,1:48)*[usf;vsf]+Bs(52:54,4:6)*Fgf; ab_asf=MK*usf+MC*vsf;
 

@@ -1,4 +1,4 @@
-%clc, clear all %#ok<CLALL>
+clc, clear all; close all %#ok<CLALL>
 format long
 err=0.005; dt=0.005;
 
@@ -13,19 +13,19 @@ STRUC.MK=MK; STRUC.MC=MC;
 
 % Parameters of bearings
 % Linear bearings
-kl=H*919.422;cl=H*27.717;
+kl=H*919.422;cl=H*27.717;%cl=H*27.717;%cl=H*183.884;
 mkl=m\kl;mcl=m\cl;
 Al=[zeros(24,24) eye(24) zeros(24,6);MK-R*m_RK MC-R*m_RC R*mkl R*mcl;zeros(3,51) eye(3);m_RK m_RC -mkl -mcl];
 Bl=[zeros(51,3);-eye(3)]; Cl=eye(54); Dl=zeros(54,3);
 
 % Fractional bearings
-A_h=pi()*0.27^2/0.18; % 0.41^2/0.25 0.27^2/0.18 % geometric parameters of the VE damper: shear area over shear heihgt
+A_h=pi()*0.45^2/0.50; % *0.45^2/0.50 % geometric parameters of the VE damper: shear area over shear heihgt
 %parameters of FDZe model identified by the experiments. G1,G2,yita (kpa).
 G1=4.794E3;G2=4.793E2; eta=2.483E2; alpha=0.520;  a_0=(G1+G2)/eta;b_1=A_h*G1; b_0=b_1*G2/eta;
 lim=18000; % this is the biggest data number of the earthquake, which is jiji earthquake.
-wa=zeros(1,lim-1);wa(1)=alpha;UL=lim-1;T=dt^alpha;
+GL=zeros(1,lim-1);GL(1)=-alpha;UL=lim-1;T=dt^alpha;
 for i=2:1:lim-1
-    temp=(1+alpha)/i;wa(i)=wa(i-1)*(1-temp);
+    temp=(1+alpha)/i;GL(i)=GL(i-1)*(1-temp);
     if abs(err>temp)
         UL=i-1;
         break;
@@ -39,7 +39,7 @@ sys=ss(As,Bs,Cs,Ds) ;sysd=c2d(sys,dt);Asd=sysd.A;Bsd=sysd.B;Csd=sysd.C;Dsd=sysd.
 %bearing subsystem
 Ab=-a_0*T*eye(3); Bb=T*eye(3); Cb=(b_0-a_0*b_1)*H; Db=b_1*H;
 xb_initial=zeros(3,1);xs_initial=zeros(54,1);
-Reduce=zeros(3,54);Reduce(:,49:51)=eye(3);aN=alpha*[1;1;1];
+Reduce=zeros(3,54);Reduce(:,49:51)=eye(3);
 
 % Evaluation criteria
 Jl=zeros(7,7,2);Jf=zeros(7,7,2);J=zeros(7,7,2);
@@ -50,7 +50,7 @@ for i=1:1:2  % E_direc
         if UL>Nt-1 
             UL=Nt-1; 
         end
-        input=[t' ag'];sim('fsim_ss_2016a');
+        agt=[t' ag'];sim('fss_2016a'); clear fss_sf;
         resp_l=lsim(ss(Al,Bl,Cl,Dl),ag,t,zeros(54,1));
         [Jl(j,:,i),Jf(j,:,i),J(j,:,i)] = evaluation_criteria(Al,resp_l,As,Bs,usb,Fb,Nt,STRUC);
     end
