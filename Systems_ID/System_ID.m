@@ -10,6 +10,7 @@ f_min = .01;
 f_max = 20;
 
 %% Determine np_ELA, np_FDZ
+% different versions of MATLAB may have different values
 % out=detrend(a_FDZ(5,:,1));
 % SysId_try = TF_Freq_Damp(in,out,fc,Ts,butter_order,nfft,f_min,f_max,28,30);
 % 
@@ -26,6 +27,7 @@ f_max = 20;
 % xlim([0,20]);
 
 %% System identification
+% these values of ELA_np and FDZ_np work well in MATLAB2018a on MAC
 ELA_np=zeros(2,9,3); % order of numerator and denominator, base + 8 floors, 3 dirs
 ELA_np(:,:,1)=[...   % x-dir
     20 20 20 20 20 20 20 20 20;
