@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 %1979 Imperial Valley Earthquake, El Centro. First column contains Ch # 9 FN component
 %and second column contains Ch # 9 FP component. Acc. in cm/sec^2 and dt=0.005 sec.
 -6.28E+00		-2.11E+01
