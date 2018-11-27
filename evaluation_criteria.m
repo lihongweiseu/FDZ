@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 function [Jl,Jf,J] = evaluation_criteria(Al,resp_l,As,Bs,usb,Fb,Nt,STRUC)
 usl=resp_l(:,1:24)'; % sl-superstructure with liear bearings
 vsl=resp_l(:,25:48)';
