@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 %This is to calculate 'STRUC.mat' for 'isolation_run.m'
 %All the values here is provided by Sriram Narasimhan
 
