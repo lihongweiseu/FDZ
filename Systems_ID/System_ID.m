@@ -10,24 +10,22 @@ f_min = .01;
 f_max = 20;
 
 %% Determine np_ELA, np_FDZ
-% different versions of MATLAB may have different values
-% out=detrend(a_FDZ(5,:,1));
-% SysId_try = TF_Freq_Damp(in,out,fc,Ts,butter_order,nfft,f_min,f_max,28,30);
-% 
-% figure('Name','check');
-% subplot(2,1,1); % magnitude
-% 
-% semilogx(SysId_try.freq_series,SysId_try.dB,'LineStyle','-','color','b','linewidth',1); hold on; grid on;
-% semilogx(SysId_try.freq_series,SysId_try.dB_id,'LineStyle','-','color','r','linewidth',1);%ylim([-50,50]);
-% xlim([0,20]);
-% 
-% subplot(2,1,2); % Phase
-% semilogx(SysId_try.freq_series,SysId_try.ang,'LineStyle','-','color','b','linewidth',1); hold on; grid on;
-% semilogx(SysId_try.freq_series,SysId_try.ang_id,'LineStyle','-','color','r','linewidth',1);
-% xlim([0,20]);
+out=detrend(a_FDZ(5,:,1));
+SysId_try = TF_Freq_Damp(in,out,fc,Ts,butter_order,nfft,f_min,f_max,22,22);
+
+figure('Name','check');
+subplot(2,1,1); % magnitude
+
+semilogx(SysId_try.freq_series,SysId_try.dB,'LineStyle','-','color','b','linewidth',1); hold on; grid on;
+semilogx(SysId_try.freq_series,SysId_try.dB_id,'LineStyle','-','color','r','linewidth',1);%ylim([-50,50]);
+xlim([0,20]);
+
+subplot(2,1,2); % Phase
+semilogx(SysId_try.freq_series,SysId_try.ang,'LineStyle','-','color','b','linewidth',1); hold on; grid on;
+semilogx(SysId_try.freq_series,SysId_try.ang_id,'LineStyle','-','color','r','linewidth',1);
+xlim([0,20]);
 
 %% System identification
-% these values of ELA_np and FDZ_np work well in MATLAB2018a on MAC
 ELA_np=zeros(2,9,3); % order of numerator and denominator, base + 8 floors, 3 dirs
 ELA_np(:,:,1)=[...   % x-dir
     20 20 20 20 20 20 20 20 20;
@@ -41,14 +39,14 @@ ELA_np(:,:,3)=[...   % r-dir
 
 FDZ_np=zeros(2,9,3); % order of numerator and denominator, base + 8 floors, 3 dirs
 FDZ_np(:,:,1)=[...   % x-dir
-    22 26 28 26 28 22 22 22 22;
-    22 28 28 26 30 22 22 22 22];
+    22 32 22 22 22 22 22 22 22;
+    22 32 22 24 22 24 24 24 24];
 FDZ_np(:,:,2)=[...   % y-dir
-    26 26 26 22 26 22 22 22 22;
-    26 26 26 22 28 22 22 22 22];
+    26 22 20 22 22 22 22 22 22;
+    26 24 22 24 24 24 24 24 24];
 FDZ_np(:,:,3)=[...   % r-dir
-    24 24 24 24 24 24 22 22 22;
-    24 24 26 26 24 26 22 22 22];
+    24 22 22 20 20 20 20 20 20;
+    24 22 22 20 20 20 20 20 20];
 
 a_FIX_id=cell(8,3); a_ELA_id=cell(9,3); a_FDZ_id=cell(9,3); % base + 8 floors, 3 directions.
 for dir=1:1:3
