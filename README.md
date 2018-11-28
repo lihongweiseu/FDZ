@@ -15,6 +15,6 @@ The ***example*** folder is to draw the response plots for certain earthquake ex
 
 The ***Systems_ID*** folder is to identify the systems.
 
-1.	Run ***input_output.m*** to get the file ***input_output_xyr.mat***.
+1.	Run ***input_output.m*** to get the file ***input_output_xyr.mat***, which is the file needes in ***System_ID.m***.
 2.	Run ***System_ID.m*** to identify the systems.
 3.	***TF_Freq_Damp.m*** is the function used in ***System_ID.m***.
