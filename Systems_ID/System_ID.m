@@ -9,7 +9,8 @@ nfft = 2^14;
 f_min = .01;
 f_max = 20;
 
-%% Determine np_ELA, np_FDZ
+%% Determine np_ELA and np_FDZ, which should be ovens in the range of [20,40]
+% Different MATLAB versions may have different values, users can try by themselves
 % out=detrend(a_FDZ(5,:,1));
 % SysId_try = TF_Freq_Damp(in,out,fc,Ts,butter_order,nfft,f_min,f_max,22,22);
 % 
@@ -26,6 +27,7 @@ f_max = 20;
 % xlim([0,20]);
 
 %% System identification
+% The following values work well in MAC MATLAB2018a
 ELA_np=zeros(2,9,3); % order of numerator and denominator, base + 8 floors, 3 dirs
 ELA_np(:,:,1)=[...   % x-dir
     20 20 20 20 20 20 20 20 20;
