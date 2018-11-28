@@ -10,20 +10,20 @@ f_min = .01;
 f_max = 20;
 
 %% Determine np_ELA, np_FDZ
-out=detrend(a_FDZ(5,:,1));
-SysId_try = TF_Freq_Damp(in,out,fc,Ts,butter_order,nfft,f_min,f_max,22,22);
-
-figure('Name','check');
-subplot(2,1,1); % magnitude
-
-semilogx(SysId_try.freq_series,SysId_try.dB,'LineStyle','-','color','b','linewidth',1); hold on; grid on;
-semilogx(SysId_try.freq_series,SysId_try.dB_id,'LineStyle','-','color','r','linewidth',1);%ylim([-50,50]);
-xlim([0,20]);
-
-subplot(2,1,2); % Phase
-semilogx(SysId_try.freq_series,SysId_try.ang,'LineStyle','-','color','b','linewidth',1); hold on; grid on;
-semilogx(SysId_try.freq_series,SysId_try.ang_id,'LineStyle','-','color','r','linewidth',1);
-xlim([0,20]);
+% out=detrend(a_FDZ(5,:,1));
+% SysId_try = TF_Freq_Damp(in,out,fc,Ts,butter_order,nfft,f_min,f_max,22,22);
+% 
+% figure('Name','check');
+% subplot(2,1,1); % magnitude
+% 
+% semilogx(SysId_try.freq_series,SysId_try.dB,'LineStyle','-','color','b','linewidth',1); hold on; grid on;
+% semilogx(SysId_try.freq_series,SysId_try.dB_id,'LineStyle','-','color','r','linewidth',1);%ylim([-50,50]);
+% xlim([0,20]);
+% 
+% subplot(2,1,2); % Phase
+% semilogx(SysId_try.freq_series,SysId_try.ang,'LineStyle','-','color','b','linewidth',1); hold on; grid on;
+% semilogx(SysId_try.freq_series,SysId_try.ang_id,'LineStyle','-','color','r','linewidth',1);
+% xlim([0,20]);
 
 %% System identification
 ELA_np=zeros(2,9,3); % order of numerator and denominator, base + 8 floors, 3 dirs
